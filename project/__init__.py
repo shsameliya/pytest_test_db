@@ -31,6 +31,11 @@ def create_app():
     config_type = os.getenv("CONFIG_TYPE", default="config.DevelopmentConfig")
     app.config.from_object(config_type)
     app.config["WTF_CSRF_ENABLED"] = False
+
+    # Set the host and port for the Flask application
+    app.config["HOST"] = "127.0.0.1"
+    app.config["PORT"] = "5002"
+
     initialize_extensions(app)
     register_blueprints(app)
     configure_logging(app)
@@ -74,6 +79,7 @@ def register_blueprints(app):
 
 
 def configure_logging(app):
+    # TODO need to explore this functaion
     if app.config["LOG_WITH_GUNICORN"]:
         gunicorn_error_logger = logging.getLogger("gunicorn.error")
         app.logger.handlers.extend(gunicorn_error_logger.handlers)
