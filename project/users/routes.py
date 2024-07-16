@@ -2,38 +2,49 @@ from flask import jsonify, request
 
 from project import db
 from project.models import User
+from project.users.forms import RegisterForm
 
 from . import users_blueprint
-
-# from project.users.forms import RegisterForm
 
 
 # CREATE operation
 @users_blueprint.route("/", methods=["POST"])
 def create_user():
-    # form = request.form
-    # print('email--', request.form.get('email'))
-    # print('password--', request.form.get('password'))
-    # form = RegisterForm()
-    # if form.validate_on_submit():
-    # if form.validate():
-    # email = form.email.data
-    # password = form.password.data
-    # if User.email == email:
-    #     return jsonify({'message': 'This email already register', 'errors': form.errors}), 401
+    try:
+        form = request.form
+        print("email--", request.form.get("email"))
+        print("password--", request.form.get("password"))
+        form = RegisterForm()
+        if form.validate_on_submit():
+            existing_user = User.query.filter_by(
+                email=request.form.get("email")
+            ).first()
+            if existing_user:
+                return (
+                    jsonify(
+                        {
+                            "message": "This email is already registered",
+                            "errors": {"email": ["Email already exists"]},
+                        }
+                    ),
+                    409,
+                )
+            new_user = User(
+                email=request.form.get("email"), password=request.form.get("password")
+            )
+            db.session.add(new_user)
+            db.session.commit()
 
-    new_user = User(
-        email=request.form.get("email"), password=request.form.get("password")
-    )
-    db.session.add(new_user)
-    db.session.commit()
-
-    return (
-        jsonify({"message": "User created successfully", "user_id": new_user.id}),
-        201,
-    )
-    # else:
-    #     return jsonify({'message': 'User not', 'errors': form.errors}), 401
+            return (
+                jsonify(
+                    {"message": "User created successfully", "user_id": new_user.id}
+                ),
+                201,
+            )
+        else:
+            return jsonify({"message": "User not", "errors": form.errors}), 401
+    except Exception as e:
+        return jsonify({"message": "An error occurred", "error": str(e)}), 500
 
 
 # READ operation (Get all users)

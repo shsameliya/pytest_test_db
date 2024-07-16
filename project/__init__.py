@@ -32,9 +32,9 @@ def create_app():
     app.config.from_object(config_type)
     app.config["WTF_CSRF_ENABLED"] = False
 
-    # Set the host and port for the Flask application
-    app.config["HOST"] = "127.0.0.1"
-    app.config["PORT"] = "5002"
+    # # Set the host and port for the Flask application
+    # app.config["HOST"] = "127.0.0.1"
+    # app.config["PORT"] = "5002"
 
     initialize_extensions(app)
     register_blueprints(app)
