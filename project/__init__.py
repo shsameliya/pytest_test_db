@@ -4,6 +4,7 @@ from logging.handlers import RotatingFileHandler
 
 import sqlalchemy as sa
 from click import echo
+from dotenv import load_dotenv
 from flask import Flask
 from flask.logging import default_handler
 from flask_login import LoginManager
@@ -14,6 +15,8 @@ from flask_wtf.csrf import CSRFProtect
 # Configuration
 # -------------
 
+
+load_dotenv()
 db = SQLAlchemy()
 csrf_protection = CSRFProtect()
 login = LoginManager()
@@ -31,10 +34,6 @@ def create_app():
     config_type = os.getenv("CONFIG_TYPE", default="config.DevelopmentConfig")
     app.config.from_object(config_type)
     app.config["WTF_CSRF_ENABLED"] = False
-
-    # # Set the host and port for the Flask application
-    # app.config["HOST"] = "127.0.0.1"
-    # app.config["PORT"] = "5002"
 
     initialize_extensions(app)
     register_blueprints(app)
