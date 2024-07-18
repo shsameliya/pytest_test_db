@@ -8,10 +8,12 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = os.getenv("SECRET_KEY", default="BAD_SECRET_KEY")
+
     # postgresql
     # SQLALCHEMY_DATABASE_URI = os.getenv("POSTGRESQL_DATABASE_URI")
     # mysql
     SQLALCHEMY_DATABASE_URI = os.getenv("MYSQL_DATABASE_URI")
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     LOG_WITH_GUNICORN = os.getenv("LOG_WITH_GUNICORN", default=False)
 
@@ -27,9 +29,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.getenv(
-        # "TEST_DATABASE_URI", default=os.getenv("TEST_MYSQL_DATABASE_URI")
-        "TEST_DATABASE_URI",
-        default="mysql+pymysql://root@127.0.0.1/pytest_2_pytest",
+        "TEST_DATABASE_URI", default=os.getenv("TEST_MYSQL_DATABASE_URI")
     )
     # SQLALCHEMY_DATABASE_URI = os.getenv('TEST_DATABASE_URI',default=f"sqlite:///{os.path.join(BASEDIR, 'instance', 'test.db')}")
     WTF_CSRF_ENABLED = False

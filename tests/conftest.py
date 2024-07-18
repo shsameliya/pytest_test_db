@@ -2,7 +2,6 @@ import os
 
 import pytest
 
-# from project import create_app,db
 from project import create_app, db
 from project.models import Book, User
 
@@ -83,6 +82,7 @@ def log_in_second_user(test_client):
     test_client.get("/logout")
 
 
+#Test database create function
 @pytest.fixture(scope="module")
 def cli_test_client():
     # Set the Testing configuration prior to creating the Flask application
