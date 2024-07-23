@@ -35,9 +35,16 @@ def create_app():
     app.config.from_object(config_type)
     app.config["WTF_CSRF_ENABLED"] = False
 
+    logging.basicConfig(  # SET LOGGING IN PROJECT with log store in specific file
+        filename="record.log",
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(threadName)s-%(thread)d: %(message)s [in %(filename)s:%(lineno)d]",
+    )
+    # logging.basicConfig(level=logging.DEBUG)  # SET LOGGING IN PROJECT
+
     initialize_extensions(app)
     register_blueprints(app)
-    # configure_logging(app)
+    configure_logging(app)
     register_cli_commands(app)
 
     engine = sa.create_engine(app.config["SQLALCHEMY_DATABASE_URI"])
@@ -77,25 +84,26 @@ def register_blueprints(app):
     app.register_blueprint(users_blueprint)
 
 
-# def configure_logging(app):
-#     # TODO need to explore this functaion
-#     if app.config["LOG_WITH_GUNICORN"]:
-#         gunicorn_error_logger = logging.getLogger("gunicorn.error")
-#         app.logger.handlers.extend(gunicorn_error_logger.handlers)
-#         app.logger.setLevel(logging.DEBUG)
-#     else:
-#         file_handler = RotatingFileHandler(
-#             "instance/flask-user-management.log", maxBytes=16384, backupCount=20
-#         )
-#         file_formatter = logging.Formatter(
-#             "%(asctime)s %(levelname)s %(threadName)s-%(thread)d: %(message)s [in %(filename)s:%(lineno)d]"
-#         )
-#         file_handler.setFormatter(file_formatter)
-#         file_handler.setLevel(logging.INFO)
-#         app.logger.addHandler(file_handler)
+# this function manage all logging details
+def configure_logging(app):
+    # TODO need to explore this functaion
+    if app.config["LOG_WITH_GUNICORN"]:
+        gunicorn_error_logger = logging.getLogger("gunicorn.error")
+        app.logger.handlers.extend(gunicorn_error_logger.handlers)
+        # app.logger.setLevel(logging.DEBUG)
+    else:
+        file_handler = RotatingFileHandler(
+            "instance/flask-user-management.log", maxBytes=16384, backupCount=20
+        )
+        file_formatter = logging.Formatter(
+            "%(asctime)s %(levelname)s %(threadName)s-%(thread)d: %(message)s [in %(filename)s:%(lineno)d]"
+        )
+        file_handler.setFormatter(file_formatter)
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
 
-#     app.logger.removeHandler(default_handler)
-#     app.logger.info("Starting the Flask User Management App...")
+    app.logger.removeHandler(default_handler)
+    app.logger.info("Starting the Flask User Management App...")
 
 
 def register_cli_commands(app):

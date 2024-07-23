@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import abort, current_app, jsonify, request
 
 from project import db
 from project.models import Book
@@ -37,14 +37,17 @@ def get_all_books():
 # READ operation (Get single book by id)
 @books_blueprint.route("/<int:book_id>", methods=["GET"])
 def get_book(book_id):
-    book = Book.query.get_or_404(book_id)
+
+    # book = Book.query.get_or_404(book_id)
+    book = db.session.get(Book, book_id)
     return jsonify({"id": book.id, "title": book.title, "author": book.author})
 
 
 # UPDATE operation
 @books_blueprint.route("/<int:book_id>", methods=["PUT"])
 def update_book(book_id):
-    book = Book.query.get_or_404(book_id)
+    # book = Book.query.get_or_404(book_id)
+    book = db.session.get(Book, book_id)
     title = request.form.get("title")
     author = request.form.get("author")
     book.title = title
@@ -56,7 +59,10 @@ def update_book(book_id):
 # DELETE operation
 @books_blueprint.route("/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
-    book = Book.query.get_or_404(book_id)
+    # book = Book.query.get_or_404(book_id)
+    book = db.session.get(Book, book_id)
+    if book is None:
+        abort(404)
     db.session.delete(book)
     db.session.commit()
     return jsonify({"message": "Book deleted successfully", "book_id": book.id})

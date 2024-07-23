@@ -5,6 +5,16 @@ import pytest
 from project import create_app, db
 from project.models import Book, User
 
+
+import warnings
+
+@pytest.fixture(autouse=True)
+def ignore_sqlalchemy_deprecations():
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
+        yield
+
+
 # --------
 # Fixtures
 # --------
@@ -12,7 +22,7 @@ from project.models import Book, User
 
 @pytest.fixture(scope="module")
 def new_user():
-    user = User("patkennedy79@gmail.com", "FlaskIsAwesome")
+    user = User("user@gmail.com", "Password")
     return user
 
 
@@ -35,8 +45,8 @@ def init_database(test_client):
     db.create_all()
 
     # Insert user data
-    default_user = User(email="patkennedy79@gmail.com", password="FlaskIsAwesome")
-    second_user = User(email="patrick@yahoo.com", password="FlaskIsTheBest987")
+    default_user = User(email="user@gmail.com", password="Password")
+    second_user = User(email="user@yahoo.com", password="BestPassword")
     db.session.add(default_user)
     db.session.add(second_user)
 
@@ -44,9 +54,9 @@ def init_database(test_client):
     db.session.commit()
 
     # Insert book data
-    book1 = Book(title="Malibu Rising", author="Taylor Jenkins Reid")
-    book2 = Book(title="Carrie Soto is Back", author="Taylor Jenkins Reid")
-    book3 = Book(title="Book Lovers", author="Emily Henry")
+    book1 = Book(title="Sub", author="harshal")
+    book2 = Book(title="Love is Back", author="Shobhit")
+    book3 = Book(title="Books", author="Rishabh")
     db.session.add(book1)
     db.session.add(book2)
     db.session.add(book3)
@@ -59,30 +69,28 @@ def init_database(test_client):
     db.drop_all()
 
 
-@pytest.fixture(scope="function")
-def log_in_default_user(test_client):
-    test_client.post(
-        "/login", data={"email": "patkennedy79@gmail.com", "password": "FlaskIsAwesome"}
-    )
+# @pytest.fixture(scope="function")
+# def log_in_default_user(test_client):
+#     test_client.post("/login", data={"email": "user@gmail.com", "password": "Password"})
 
-    yield  # this is where the testing happens!
+#     yield  # this is where the testing happens!
 
-    test_client.get("/logout")
+#     test_client.get("/logout")
 
 
-@pytest.fixture(scope="function")
-def log_in_second_user(test_client):
-    test_client.post(
-        "login", data={"email": "patrick@yahoo.com", "password": "FlaskIsTheBest987"}
-    )
+# @pytest.fixture(scope="function")
+# def log_in_second_user(test_client):
+#     test_client.post(
+#         "login", data={"email": "user@yahoo.com", "password": "BestPassword"}
+#     )
 
-    yield  # this is where the testing happens!
+#     yield  # this is where the testing happens!
 
-    # Log out the user
-    test_client.get("/logout")
+#     # Log out the user
+#     test_client.get("/logout")
 
 
-#Test database create function
+# Test database create function
 @pytest.fixture(scope="module")
 def cli_test_client():
     # Set the Testing configuration prior to creating the Flask application
