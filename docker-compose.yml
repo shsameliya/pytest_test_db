@@ -1,0 +1,96 @@
+# version: '3.7'
+
+services:
+  # The 'web' service, which is your Flask application
+  web:
+    # Build the Docker image from the current directory
+    build: .
+    # Map port 5000 on the host to port 5000 on the container
+    ports:
+      - "5000:5000"
+    # Mount the current directory as a volume inside the container
+    volumes:
+      - .:/app
+    # The 'web' service depends on the 'db' and 'db_test' services
+    depends_on:
+      - db
+      - db_test
+    # Set environment variables for the Flask application
+    environment:
+      FLASK_ENV: development  
+
+  # The 'db' service, which is a PostgreSQL database used for normal development
+  db:
+    # Use the latest PostgreSQL image from Docker Hub
+    image: postgres:latest
+    # Map port 5432 on the host to port 5432 on the container
+    ports:
+      - "5432:5432"
+    # Set environment variables for the PostgreSQL database
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pytest_2_test
+  
+  # The 'db_test' service, which is a separate PostgreSQL database used for testing
+  db_test:
+    # Use the latest PostgreSQL image from Docker Hub
+    image: postgres:latest
+    # Map port 5433 on the host to port 5432 on the container
+    ports:
+      - "5433:5432"
+    # Set environment variables for the PostgreSQL test database
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pytest_2_pytest
+
+
+
+# services:
+#   web:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     volumes:
+#       - .:/app
+#     depends_on:
+#       db:
+#         condition: service_healthy
+#       db_test:
+#         condition: service_healthy
+#     environment:
+#       FLASK_ENV: development
+
+#   db:
+#     image: mysql:latest
+#     ports:
+#       - "3306:3306"
+#     environment:
+#       MYSQL_ROOT_PASSWORD: password
+#       MYSQL_DATABASE: pytest_2_test
+#       MYSQL_USER: user
+#       MYSQL_PASSWORD: password
+#     healthcheck:
+#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+#       # interval: 10s
+#       # retries: 5
+#       # start_period: 30s
+#       # timeout: 10s
+
+#   db_test:
+#     image: mysql:latest
+#     ports:
+#       - "3307:3306"
+#     environment:
+#       MYSQL_ROOT_PASSWORD: password
+#       MYSQL_DATABASE: pytest_2_pytest
+#       MYSQL_USER: user
+#       MYSQL_PASSWORD: password
+#     healthcheck:
+#       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+#       # interval: 10s
+#       # retries: 5
+#       # start_period: 30s
+#       # timeout: 10s
+
+
+

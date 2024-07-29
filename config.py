@@ -2,7 +2,6 @@ import os
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
-
 class Config(object):
     FLASK_ENV = "development"
     DEBUG = False
@@ -10,7 +9,7 @@ class Config(object):
     SECRET_KEY = os.getenv("SECRET_KEY", default="BAD_SECRET_KEY")
 
     # postgresql
-    # SQLALCHEMY_DATABASE_URI = os.getenv("POSTGRESQL_DATABASE_URI")
+    
     # mysql
     SQLALCHEMY_DATABASE_URI = os.getenv("MYSQL_DATABASE_URI")
 
