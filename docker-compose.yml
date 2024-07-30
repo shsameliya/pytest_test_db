@@ -1,5 +1,39 @@
 # version: '3.7'
 
+# services:
+#   # The 'web' service, which is your Flask application
+#   web:
+#     build: .
+#     ports:
+#       - "5000:5000"
+#     volumes:
+#       - .:/app
+#     depends_on:
+#       - db
+#     environment:
+#       FLASK_ENV: development  
+
+#   # The 'db' service, which is a PostgreSQL database
+#   db:
+#     image: postgres:latest
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       POSTGRES_PASSWORD: password
+#       POSTGRES_DB: default_db  # Initial database to be created
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data  # Persist data
+#       - ./init:/docker-entrypoint-initdb.d  # Mount initialization scripts
+  
+# volumes:
+#   pgdata:
+
+
+# ------------------------------------------------------------------------------------
+
+
+version: '3.7'
+
 services:
   # The 'web' service, which is your Flask application
   web:
@@ -28,7 +62,7 @@ services:
       - "5432:5432"
     # Set environment variables for the PostgreSQL database
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ROOT
       POSTGRES_DB: pytest_2_test
   
   # The 'db_test' service, which is a separate PostgreSQL database used for testing
@@ -40,9 +74,11 @@ services:
       - "5433:5432"
     # Set environment variables for the PostgreSQL test database
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: ROOT
       POSTGRES_DB: pytest_2_pytest
 
+
+# --------------------------------------------------------------------------------
 
 
 # services:
