@@ -27,11 +27,6 @@ def test_login_user(test_client, init_database):
     assert response.status_code == 400
     assert response.json["message"] == "Invalid form data"
 
-    # login_data = {'email': '', 'password': ''}
-    # response = test_client.post('/api/users/login', data=login_data)
-    # assert response.status_code == 401
-    # assert response.json['message'] == 'Invalid credentials'
-
 
 def test_get_all_users(test_client, init_database):
     response = test_client.get("/api/users/")

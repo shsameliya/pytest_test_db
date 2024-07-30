@@ -35,12 +35,12 @@ def create_app():
     app.config.from_object(config_type)
     app.config["WTF_CSRF_ENABLED"] = False
 
-    logging.basicConfig(  # SET LOGGING IN PROJECT with log store in specific file
-        filename="record.log",
-        level=logging.DEBUG,
-        format="%(asctime)s %(levelname)s %(threadName)s-%(thread)d: %(message)s [in %(filename)s:%(lineno)d]",
-    )
-    # logging.basicConfig(level=logging.DEBUG)  # SET LOGGING IN PROJECT
+    # logging.basicConfig(  # SET LOGGING IN PROJECT with log store in specific file
+    #     filename="record.log",
+    #     level=logging.DEBUG,
+    #     format="%(asctime)s %(levelname)s %(threadName)s-%(thread)d: %(message)s [in %(filename)s:%(lineno)d]",
+    # )
+    logging.basicConfig(level=logging.DEBUG)  # SET LOGGING IN PROJECT
 
     initialize_extensions(app)
     register_blueprints(app)
@@ -90,7 +90,7 @@ def configure_logging(app):
     if app.config["LOG_WITH_GUNICORN"]:
         gunicorn_error_logger = logging.getLogger("gunicorn.error")
         app.logger.handlers.extend(gunicorn_error_logger.handlers)
-        # app.logger.setLevel(logging.DEBUG)
+        app.logger.setLevel(logging.DEBUG)
     else:
         file_handler = RotatingFileHandler(
             "instance/flask-user-management.log", maxBytes=16384, backupCount=20

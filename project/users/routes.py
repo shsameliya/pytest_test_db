@@ -1,14 +1,7 @@
 import logging
 
-from flask import (
-    current_app,
-    flash,
-    jsonify,
-    redirect,
-    render_template,
-    request,
-    url_for,
-)
+from flask import (current_app, flash, jsonify, redirect, render_template,
+                   request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 
 # from app_name import app

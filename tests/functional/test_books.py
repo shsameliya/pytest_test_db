@@ -50,3 +50,13 @@ def test_delete_book(test_client, init_database):
     response = test_client.delete(f"/books/{book_id}")
     assert response.status_code == 200
     assert response.json["message"] == "Book deleted successfully"
+
+
+# def test_delete_book_invalid_id(test_client, init_database):
+#     book_id = 22  # Assuming book ID 1 exists in the database
+#     response = test_client.delete(f"/books/{book_id}")
+#     print(response.status_code)  # Debugging: Print response status code
+#     print(response.json)  # Debugging: Print response JSON
+#     assert response.status_code == 404
+#     # assert response.json["message"] == "Book Not found"
+   

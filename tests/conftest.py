@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import pytest
 
@@ -6,12 +7,12 @@ from project import create_app, db
 from project.models import Book, User
 
 
-import warnings
-
 @pytest.fixture(autouse=True)
 def ignore_sqlalchemy_deprecations():
     with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning, module="sqlalchemy")
+        warnings.filterwarnings(
+            "ignore", category=DeprecationWarning, module="sqlalchemy"
+        )
         yield
 
 
